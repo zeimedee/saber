@@ -16,6 +16,7 @@ func SetupRouter() *gin.Engine {
 	{
 		api.GET("/", handlers.HealthCheck)
 		api.POST("/add", valueHandler.AddValue)
+		api.GET("/ws", handlers.WebSocket)
 	}
 	return router
 }

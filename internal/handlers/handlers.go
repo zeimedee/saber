@@ -3,8 +3,10 @@ package handlers
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 	"github.com/zeimedee/saber/internal/services"
 )
 
@@ -41,4 +43,21 @@ func (v *valueHandler) AddValue(ctx *gin.Context) {
 }
 
 func (v *valueHandler) GetValue(ctx *gin.Context) {
+}
+
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+}
+
+func WebSocket(ctx *gin.Context) {
+	conn, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
+	if err != nil {
+		return
+	}
+	defer conn.Close()
+	for {
+		conn.WriteMessage(websocket.TextMessage, []byte("Hello, WebSocket!"))
+		time.Sleep(time.Second)
+	}
 }
