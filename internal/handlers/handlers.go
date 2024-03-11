@@ -29,23 +29,20 @@ func HealthCheck(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{"message": "server is happy 😀"})
 }
 
-func (v *valueHandler) AddValue(ctx *gin.Context) {
-	var body requestBody
-	if err := ctx.ShouldBindJSON(&body); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	data := requestBody{
-		Value: body.Value,
-	}
+// func (v *valueHandler) AddValue(ctx *gin.Context) {
+// 	var body requestBody
+// 	if err := ctx.ShouldBindJSON(&body); err != nil {
+// 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
+// 	data := requestBody{
+// 		Value: body.Value,
+// 	}
 
-	v.valueService.AddTotal(data.Value)
+// 	v.valueService.AddTotal(data.Value)
 
-	ctx.JSON(200, gin.H{"message": "value add is : " + strconv.Itoa(v.valueService.Value)})
-}
-
-func (v *valueHandler) GetValue(ctx *gin.Context) {
-}
+// 	ctx.JSON(200, gin.H{"message": "value add is : " + strconv.Itoa(v.valueService.Value)})
+// }
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
