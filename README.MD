@@ -7,7 +7,7 @@
 
  start kafka by running in the terminal
  ```
- docker- compose up -d
+ docker-compose up -d
  ```
 this downloads the kafka image and runs the container in the background
 
