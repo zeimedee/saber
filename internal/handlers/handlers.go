@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/IBM/sarama"
 	"github.com/gin-gonic/gin"
@@ -62,11 +61,7 @@ func (v *valueHandler) WebSocket(ctx *gin.Context) {
 		return
 	}
 	defer consumer.Close()
-	// partition, err := consumer.Partitions("count")
-	// if err != nil {
-	// 	ctx.JSON(400, gin.H{"message": "error reading partitions"})
-	// 	return
-	// }
+
 	pc, err := consumer.ConsumePartition("count", 0, sarama.OffsetNewest)
 	if err != nil {
 		ctx.JSON(400, gin.H{"message": "error creating partition consumer"})
@@ -79,9 +74,9 @@ func (v *valueHandler) WebSocket(ctx *gin.Context) {
 		case msg := <-pc.Messages():
 			val, _ := strconv.Atoi(string(msg.Value))
 			v.valueService.AddTotal(val)
-			str := strconv.Itoa(v.valueService.Value)
-			conn.WriteMessage(websocket.TextMessage, []byte(str))
-			time.Sleep(time.Second)
+			var res requestBody
+			res.Value = v.valueService.Value
+			conn.WriteJSON(res)
 		case err := <-pc.Errors():
 			fmt.Printf("Error consuming partition: %v\n", err)
 		}
